@@ -97,7 +97,7 @@ To build this buildpack, run the following command from the buildpack's director
 
     ```bash
     cf create-buildpack pancake_buildpack pancake_buildpack-*.zip 1
-    cf push -p fixtures/phpapp
+    cf push -p fixtures/phpapp -f fixtures/phpapp/manifest.yml
     ```
 
 
@@ -121,8 +121,15 @@ To test this buildpack, run the following command from the buildpack's directory
     ./scripts/integration.sh
     ```
 
+    To run integration tests against CFDev:
+
+    ```bash
+    cf login -a https://api.dev.cfdev.sh --skip-ssl-validation -u admin -p admin
+    CUTLASS_SCHEMA=https CUTLASS_SKIP_TLS_VERIFY=true ./scripts/integration.sh
+    ```
+
     More information can be found on Github [cutlass](https://github.com/cloudfoundry/libbuildpack/cutlass).
 
 ### Reporting Issues
 
-Open an issue on this project
+Open an issue on this project.
