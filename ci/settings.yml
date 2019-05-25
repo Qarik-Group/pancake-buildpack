@@ -1,0 +1,19 @@
+---
+meta:
+  name: pancake-buildpack
+  # fly -t ohio-cf login -c https://ci2.starkandwayne.com -n cfcommunity
+  target:  ohio-cf
+  url:     https://ci2.starkandwayne.com
+
+  initial_version: 0.2.0
+
+  git:
+    email:  ((git-commit-email))
+    name:   ((git-commit-name))
+
+  github:
+    owner:  starkandwayne
+    repo:   (( grab meta.name ))
+    branch: master
+    private_key:  ((github-private-key))
+    access_token: ((github-access-token))
