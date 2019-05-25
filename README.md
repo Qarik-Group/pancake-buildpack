@@ -3,8 +3,13 @@
 Flatten VCAP_SERVICES into many environment variables. This buildpack bundles and runs `cf-pancake export` to convert any `$VCAP_SERVICES` bindings into one environment variable per credential.
 
 ```plain
+cf cs p-mysql 10mb db
 cf push -p fixtures/phpapp
 ```
+
+This `phpinfo` sample app will show that your `p-mysql` service instance credentials are available as dedicated environment variables:
+
+![phpinfo](https://cl.ly/46be09e5d940/phpinfo-cf-pancake.png)
 
 ## Buildpack User Documentation
 
