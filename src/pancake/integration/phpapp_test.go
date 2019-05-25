@@ -9,7 +9,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Simple Integration Test", func() {
+var _ = Describe("PHP app Integration Test", func() {
 	var app *cutlass.App
 	AfterEach(func() {
 		if app != nil {
@@ -19,8 +19,8 @@ var _ = Describe("Simple Integration Test", func() {
 	})
 
 	It("app deploys", func() {
-		app = cutlass.New(filepath.Join(bpDir, "fixtures", "simple_test"))
+		app = cutlass.New(filepath.Join(bpDir, "fixtures", "phpapp"))
 		PushAppAndConfirm(app)
-		Expect(app.GetBody("/")).To(ContainSubstring("Something on your website"))
+		Expect(app.GetBody("/")).To(ContainSubstring("PHP Version"))
 	})
 })

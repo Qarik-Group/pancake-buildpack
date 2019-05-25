@@ -9,7 +9,6 @@ sha:
   bin/release: 5bf496d666beb256634a2677fbe707ba322760c7a90f39a7eb684820d6d0f9e5
   bin/supply: 7e822d6a81e387c9a3a5c7365ec69492ee4154e55c9d0d817d9e66f6160a52bd
   fixtures/.gitkeep: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-  fixtures/simple_test/some_file.txt: bf059f3112049d7299f9dc39397fe721c560e790611bfdc163adadbebb4e9ca9
   manifest.yml: 42bd16d3e045e962c6e185ce1bc7ddc91ec49dcce51084d0a98bd32088de1627
   pkg/dep/sources/https---github.com-google-subcommands/.git/HEAD: d4a094f41f0f4a6a5660a5ba9c445a3d404090c924dca5fafe049795c61c819c
   pkg/dep/sources/https---github.com-google-subcommands/.git/config: b9c411e3b51b2f4ed3058f7d0538db3758f6629dbe47b5b6990e91df39af6cf9

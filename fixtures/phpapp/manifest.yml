@@ -1,10 +1,11 @@
 applications:
-- name: simple_test
+- name: phpapp
   instances: 1
   disk_quota: 512M
   memory: 128M
   stack: cflinuxfs3
   buildpacks:
   - pancake_buildpack
-  - staticfile_buildpack
-  
+  - php_buildpack
+  services:
+  - db
