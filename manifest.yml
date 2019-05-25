@@ -2,7 +2,7 @@
 language: pancake
 default_versions:
 - name: cf-pancake
-  version: 0.2.0
+  version: 0.2.1
 dependency_deprecation_dates: []
 
 include_files:
@@ -14,9 +14,9 @@ pre_package: scripts/build.sh
 
 dependencies:
 - name: cf-pancake
-  version: 0.2.0
-  uri: https://github.com/cloudfoundry-community/cf-pancake/releases/download/v0.2.0/cf-pancake-linux-amd64.tar.xz
-  sha256: 6249ade9bb290dc6fc50d6c84f3a853f343b81b9cbb736cb8089e5d61e69de4f
+  version: 0.2.1
+  uri: https://github.com/cloudfoundry-community/cf-pancake/releases/download/v0.2.1/cf-pancake-linux-amd64.tar.xz
+  sha256: 1b2413ad9e8693cab8fe82b096e1a37e8184af5b5e6a238e5d0998445836f270
   cf_stacks:
   - cflinuxfs2
   - cflinuxfs3

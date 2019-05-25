@@ -14,6 +14,7 @@ type Stager interface {
 	DepDir() string
 	DepsIdx() string
 	DepsDir() string
+	WriteProfileD(string, string) error
 }
 
 type Manifest interface {
@@ -64,6 +65,11 @@ func (s *Supplier) Run() error {
 	// Rename and move into bin/etcd, which will be in $PATH
 	err = os.Rename(pancakeBin[0], filepath.Join(s.Stager.DepDir(), "bin", "cf-pancake"))
 	if err != nil {
+		return err
+	}
+
+	if err := s.Stager.WriteProfileD("finalize_pancake_export.sh", "#!/bin/bash\neval \"$(cf-pancake exports)\""); err != nil {
+		s.Log.Error("Unable to write profile.d: %s", err.Error())
 		return err
 	}
 	return nil
