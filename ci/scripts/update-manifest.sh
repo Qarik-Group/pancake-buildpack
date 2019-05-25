@@ -3,7 +3,7 @@
 set -eu
 
 version=$(cat pancake/version)
-sha=$(sha256sum pancake/pancake-linux-amd64.tar.xz | awk '{print $1}')
+sha=$(sha256sum pancake/cf-pancake-linux-amd64.tar.xz | awk '{print $1}')
 
 git clone git pushme
 
