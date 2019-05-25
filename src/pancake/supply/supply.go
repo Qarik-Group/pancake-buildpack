@@ -2,8 +2,8 @@ package supply
 
 import (
 	"io"
-	"path/filepath"
 	"os"
+	"path/filepath"
 
 	"github.com/cloudfoundry/libbuildpack"
 )
@@ -50,8 +50,6 @@ func (s *Supplier) Run() error {
 	if err != nil {
 		return err
 	}
-	s.Log.Info("Using cf-pancake version %s", pancake.Version)
-
 	if err := s.Installer.InstallDependency(pancake, s.Stager.DepDir()); err != nil {
 		return err
 	}
