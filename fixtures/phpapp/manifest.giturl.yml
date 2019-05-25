@@ -1,0 +1,11 @@
+applications:
+- name: phpapp
+  instances: 1
+  disk_quota: 512M
+  memory: 128M
+  stack: cflinuxfs3
+  buildpacks:
+  - https://github.com/starkandwayne/pancake-buildpack
+  - php_buildpack
+  services:
+  - db
