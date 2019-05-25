@@ -9,7 +9,7 @@ cf push -p fixtures/phpapp
 
 This `phpinfo` sample app will show that your `p-mysql` service instance credentials are available as dedicated environment variables:
 
-![phpinfo](https://cl.ly/46be09e5d940/phpinfo-cf-pancake.png)
+![phpinfo](https://cl.ly/fd9532d45a9b/download/phpinfo-cf-pancake.png)
 
 ## Buildpack User Documentation
 
