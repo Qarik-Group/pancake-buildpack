@@ -97,6 +97,7 @@ To build this buildpack, run the following command from the buildpack's director
 
     ```bash
     cf create-buildpack pancake_buildpack pancake_buildpack-*.zip 1
+    cf cs p-mysql 10mb db
     cf push -p fixtures/phpapp -f fixtures/phpapp/manifest.yml
     ```
 
@@ -118,6 +119,7 @@ To test this buildpack, run the following command from the buildpack's directory
 1. Run integration tests
 
     ```bash
+    cf cs p-mysql 10mb db
     ./scripts/integration.sh
     ```
 
@@ -125,6 +127,7 @@ To test this buildpack, run the following command from the buildpack's directory
 
     ```bash
     cf login -a https://api.dev.cfdev.sh --skip-ssl-validation -u admin -p admin
+    cf cs p-mysql 10mb db
     CUTLASS_SCHEMA=https CUTLASS_SKIP_TLS_VERIFY=true ./scripts/integration.sh
     ```
 
