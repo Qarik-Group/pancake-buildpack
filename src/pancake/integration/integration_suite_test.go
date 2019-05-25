@@ -34,7 +34,7 @@ func init() {
 var _ = SynchronizedBeforeSuite(func() []byte {
 	// Run once
 	if buildpackVersion == "" {
-		packagedBuildpack, err := cutlass.PackageUniquelyVersionedBuildpack("") // "" denotes any stack. Use specific stack (e.g. "cflinuxfs2" if desired)
+		packagedBuildpack, err := cutlass.PackageUniquelyVersionedBuildpack("", false) // stackAssociationSupported=false denotes any stack. Set to true and specific stack (e.g. "cflinuxfs2" if desired)
 		Expect(err).NotTo(HaveOccurred())
 
 		data, err := json.Marshal(packagedBuildpack)
@@ -100,6 +100,9 @@ func ApiHasTask() bool {
 func ApiHasMultiBuildpack() bool {
 	return ApiGreaterThan("2.90.0")
 }
+func ApiHasSidecar() bool {
+	return ApiGreaterThan("2.134.0")
+}
 
 func AssertUsesProxyDuringStagingIfPresent(fixtureName string) {
 	Context("with an uncached buildpack", func() {
@@ -120,7 +123,7 @@ func AssertUsesProxyDuringStagingIfPresent(fixtureName string) {
 			Expect(err).To(BeNil())
 			defer os.Remove(bpFile)
 
-			traffic, built, err := cutlass.InternetTraffic(
+			traffic, built, logs, err := cutlass.InternetTraffic(
 				bpDir,
 				filepath.Join("fixtures", fixtureName),
 				bpFile,
@@ -128,6 +131,7 @@ func AssertUsesProxyDuringStagingIfPresent(fixtureName string) {
 			)
 			Expect(err).To(BeNil())
 			Expect(built).To(BeTrue())
+			Expect(logs).To(BeEmpty())
 
 			destUrl, err := url.Parse(proxy.URL)
 			Expect(err).To(BeNil())
@@ -151,7 +155,7 @@ func AssertNoInternetTraffic(fixtureName string) {
 		Expect(err).To(BeNil())
 		defer os.Remove(bpFile)
 
-		traffic, built, err := cutlass.InternetTraffic(
+		traffic, built, logs, err := cutlass.InternetTraffic(
 			bpDir,
 			filepath.Join("fixtures", fixtureName),
 			bpFile,
@@ -160,5 +164,6 @@ func AssertNoInternetTraffic(fixtureName string) {
 		Expect(err).To(BeNil())
 		Expect(built).To(BeTrue())
 		Expect(traffic).To(BeEmpty())
+		Expect(logs).To(BeEmpty())
 	})
 }

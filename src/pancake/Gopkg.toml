@@ -9,7 +9,9 @@ required = ["github.com/google/subcommands"]
 
 [[constraint]]
 name = "github.com/cloudfoundry/libbuildpack"
-branch = "master"
+# branch = "master"
+branch = "cutlass-skip-tls-verify"
+source = "github.com/drnic/libbuildpack"
 
 [[constraint]]
 name = "github.com/onsi/ginkgo"

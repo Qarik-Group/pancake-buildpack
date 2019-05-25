@@ -4,18 +4,19 @@ default_versions:
 - name: cf-pancake
   version: 0.1.0
 dependency_deprecation_dates: []
-dependencies:
-- name: cf-pancake
-  version: 0.1.0
-  sha256: aa9c4a27abb320146c77f4d5eac1e5b5c298566aa117a4c339a704e4f909a832
-  url: https://github.com/cloudfoundry-community/cf-pancake/releases/download/v0.1/cf-pankcake_linux_amd64
+
 include_files:
   - README.md
   - VERSION
-  - bin/detect
-  - bin/compile
   - bin/supply
-  - bin/finalize
-  - bin/release
   - manifest.yml
 pre_package: scripts/build.sh
+
+dependencies:
+- name: cf-pancake
+  version: 0.1.0
+  uri: https://github.com/cloudfoundry-community/cf-pancake/releases/download/v0.1/cf-pankcake_linux_amd64
+  sha256: aa9c4a27abb320146c77f4d5eac1e5b5c298566aa117a4c339a704e4f909a832
+  cf_stacks:
+  - cflinuxfs2
+  - cflinuxfs3

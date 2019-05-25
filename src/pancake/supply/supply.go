@@ -43,7 +43,14 @@ type Supplier struct {
 func (s *Supplier) Run() error {
 	s.Log.BeginStep("Supplying pancake")
 
-	// TODO: Install any dependencies here...
+	pancake, err := s.Manifest.DefaultVersion("cf-pancake")
+	if err != nil {
+		return err
+	}
+	s.Log.Info("Using cf-pancake version %s", pancake.Version)
 
+	if err := s.Installer.InstallDependency(pancake, s.Stager.DepDir()); err != nil {
+		return err
+	}
 	return nil
 }

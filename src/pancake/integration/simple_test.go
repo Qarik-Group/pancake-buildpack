@@ -13,15 +13,13 @@ var _ = Describe("Simple Integration Test", func() {
 	var app *cutlass.App
 	AfterEach(func() {
 		if app != nil {
-			app.Destroy()
+			// app.Destroy()
 		}
 		app = nil
 	})
 
-	// TODO This test is pending because it currently fails. It is just an example
-	PIt("app deploys", func() {
+	It("app deploys", func() {
 		app = cutlass.New(filepath.Join(bpDir, "fixtures", "simple_test"))
-		app.Buildpacks = []string{"pancake_buildpack"}
 		PushAppAndConfirm(app)
 		Expect(app.GetBody("/")).To(ContainSubstring("Something on your website"))
 	})
