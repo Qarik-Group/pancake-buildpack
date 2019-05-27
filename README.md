@@ -96,7 +96,7 @@ To build this buildpack, run the following command from the buildpack's director
     Upload the buildpack to your Cloud Foundry.
 
     ```bash
-    cf create-buildpack pancake_buildpack pancake_buildpack-*.zip 1
+    cf create-buildpack pancake_buildpack pancake_buildpack-*.zip 100
     cf cs p-mysql 10mb db
     cf push -p fixtures/phpapp -f fixtures/phpapp/manifest.yml
     ```
