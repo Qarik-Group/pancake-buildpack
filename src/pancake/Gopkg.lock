@@ -19,7 +19,7 @@
 
 [[projects]]
   branch = "cutlass-skip-tls-verify"
-  digest = "1:59a780edd63c85c811f9c4552b2f1dab07c7e129086b1a254867eb1fc9243098"
+  digest = "1:26eeb58286cf132a27186fed08704971c9432b592b39374c2981eb399538a880"
   name = "github.com/cloudfoundry/libbuildpack"
   packages = [
     ".",
@@ -27,7 +27,7 @@
     "packager",
   ]
   pruneopts = ""
-  revision = "50a74d31df8cf7d8ff45e781fa62d77f6b84f49d"
+  revision = "7960f8cf829c92e2220764efe2f615fdd9250b79"
   source = "github.com/drnic/libbuildpack"
 
 [[projects]]
@@ -106,6 +106,14 @@
   ]
   pruneopts = ""
   revision = "efe19c39ca106ee4ed42a1b25e1a80a53be4831a"
+
+[[projects]]
+  digest = "1:1d7e1867c49a6dd9856598ef7c3123604ea3daabf5b83f303ff457bcbc410b1d"
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  pruneopts = ""
+  revision = "ba968bfe8b2f7e042a574c888954fccecfa385b4"
+  version = "v0.8.1"
 
 [[projects]]
   digest = "1:eade4ea6782f5eed4a6b3138a648f9a332900650804fd206e5daaf99cc5613ea"

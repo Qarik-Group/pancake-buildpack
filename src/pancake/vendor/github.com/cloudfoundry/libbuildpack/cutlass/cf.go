@@ -416,10 +416,10 @@ func (a *App) Get(path string, headers map[string]string) (string, map[string][]
 	if err != nil {
 		return "", map[string][]string{}, err
 	}
-	_, insecureSkipVerify := os.LookupEnv("CUTLASS_SKIP_TLS_VERIFY")
+	insecureSkipVerify, _ := os.LookupEnv("CUTLASS_SKIP_TLS_VERIFY")
 	client := &http.Client{
 		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: insecureSkipVerify},
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: insecureSkipVerify == "true"},
 		},
 	}
 	if headers["NoFollow"] == "true" {

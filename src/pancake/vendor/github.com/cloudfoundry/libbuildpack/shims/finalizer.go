@@ -212,7 +212,7 @@ func (f *Finalizer) RunLifeycleBuild() error {
 	)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	cmd.Env = append(os.Environ(), "PACK_STACK_ID=org.cloudfoundry.stacks."+os.Getenv("CF_STACK"))
+	cmd.Env = append(os.Environ(), "CNB_STACK_ID=org.cloudfoundry.stacks."+os.Getenv("CF_STACK"))
 
 	return cmd.Run()
 }
@@ -326,14 +326,15 @@ func (f *Finalizer) moveV3Layer(layersPath string) error {
 		return err
 	}
 
-	for _, toml := range tomls {
-		decodedToml, err := f.ReadLayerMetadata(toml)
+	for _, tomlFile := range tomls {
+		decodedToml, err := f.ReadLayerMetadata(tomlFile)
 		if err != nil {
 			return err
 		}
 
+		tomlSize := len(".toml")
 		if decodedToml.Cache {
-			layerPath := toml[:len(toml)-5]
+			layerPath := tomlFile[:len(tomlFile)-tomlSize]
 			layerName := filepath.Base(layerPath)
 			if err := f.cacheLayer(layerPath, layersName, layerName); err != nil {
 				return err
@@ -342,7 +343,11 @@ func (f *Finalizer) moveV3Layer(layersPath string) error {
 
 	}
 
-	if err := os.Rename(layersPath, filepath.Join(f.V2DepsDir, layersName)); err != nil {
+	if err := os.MkdirAll(filepath.Join(f.V2DepsDir, layersName), os.ModePerm); err != nil {
+		return err
+	}
+
+	if err := libbuildpack.CopyDirectory(layersPath, filepath.Join(f.V2DepsDir, layersName)); err != nil {
 		return err
 	}
 
@@ -354,6 +359,9 @@ func (f *Finalizer) cacheLayer(v3Path, layersName, layerName string) error {
 	if err := os.MkdirAll(cacheDir, os.ModePerm); err != nil {
 		return err
 	}
-
+	err := libbuildpack.CopyFile(v3Path+".toml", cacheDir+".toml")
+	if err != nil {
+		return err
+	}
 	return libbuildpack.CopyDirectory(v3Path, cacheDir)
 }
