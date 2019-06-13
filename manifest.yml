@@ -16,7 +16,7 @@ dependencies:
 - name: cf-pancake
   version: 1.0.0
   uri: https://github.com/cloudfoundry-community/cf-pancake/releases/download/v1.0.0/cf-pancake-linux-amd64.tar.xz
-  sha256: a0ddc498395b97a5e735262df36a27838f5b6072bfb7f3c3406e6c20f9981fb9
+  sha256: c5778d5e74f3c038fa0e55734ca42b149287175491549431580057e6c6f970c8
   cf_stacks:
   - cflinuxfs2
   - cflinuxfs3
