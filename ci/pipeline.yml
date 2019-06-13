@@ -70,12 +70,6 @@ jobs:
     - get: git
       # passed:
       # - (( grab meta.name ))
-    - get: (( grab meta.name ))
-      # passed:
-      # - (( grab meta.name ))
-      # trigger: true
-      params:
-        globs: ['x']
     - task: release
       config:
         platform: linux

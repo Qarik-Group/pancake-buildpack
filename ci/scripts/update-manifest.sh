@@ -7,7 +7,9 @@ sha=$(sha256sum pancake/cf-pancake-linux-amd64.tar.xz | awk '{print $1}')
 
 git clone git pushme
 
-cat > pushme/manifest.yml <<YAML
+pushd pushme
+
+cat > manifest.yml <<YAML
 ---
 language: pancake
 default_versions:
@@ -32,7 +34,7 @@ dependencies:
   - cflinuxfs3
 YAML
 
-pushd pushme
+ echo "${version}" > VERSION
 
 if [[ "$(git status -s)X" != "X" ]]; then
   set +e
@@ -49,7 +51,7 @@ if [[ "$(git status -s)X" != "X" ]]; then
   git merge --no-edit master
   git status
   git --no-pager diff
-  git add manifest.yml
+  git add manifest.yml VERSION
   git commit -m "Updated cf-pancake to v${version}"
 else
   echo ">> No update needed"
