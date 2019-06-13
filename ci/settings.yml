@@ -38,7 +38,6 @@ jobs:
       - get: git
       - get: pancake
         trigger: true
-        params: { globs: [cf-pancake-linux-amd64.tar.xz] }
       - task: update-manifest
         config:
           platform: linux
