@@ -1,6 +1,6 @@
 ---
 meta:
-  name: pancake-buildpack
+  name: pancake
   # fly -t ohio-cf login -c https://ci2.starkandwayne.com -n cfcommunity
   target:  ohio-cf
   url:     https://ci2.starkandwayne.com
@@ -13,7 +13,63 @@ meta:
 
   github:
     owner:  starkandwayne
-    repo:   (( grab meta.name ))
+    repo:   (( grab meta.pipeline ))
     branch: master
     private_key:  ((github-private-key))
     access_token: ((github-access-token))
+
+  aws:
+    bucket:      (( grab meta.pipeline ))
+    region_name: us-east-2
+    access_key:  ((aws-access-key))
+    secret_key:  ((aws-secret-key))
+
+  slack:
+    webhook:       ((slack-webhook))
+    username:      ((slack-username))
+    icon:          ((slack-icon-url))
+    channel:       "#starkandwayne-buildpacks"
+
+jobs:
+  - name: (( grab meta.name ))
+    public: true
+    plan:
+    - do:
+      - get: git
+      - get: pancake
+        trigger: true
+        params: { globs: [cf-pancake-linux-amd64.tar.xz] }
+      - task: update-manifest
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: (( grab meta.images.go.name ))
+              tag:        (( grab meta.images.go.tag ))
+          inputs:
+          - name: git
+          - name: pancake
+          outputs:
+          - name: pushme
+          run:
+            path: git/ci/scripts/update-manifest.sh
+      - put: git
+        params:
+          repository: pushme
+          rebase: true
+
+resources:
+  - name: git
+    type: git
+    source:
+      uri:         (( grab meta.github.uri ))
+      branch:      (( grab meta.github.branch ))
+      private_key: (( grab meta.github.private_key ))
+
+  - name: pancake
+    type: github-release
+    source:
+      user: cloudfoundry-community
+      repository: cf-pancake
+      access_token: (( grab meta.github.access_token ))

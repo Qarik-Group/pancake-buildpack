@@ -13,7 +13,7 @@
 
 meta:
   name:     (( param "Please name your pipeline" ))
-  pipeline: (( grab meta.name ))
+  pipeline: (( concat meta.name "-buildpack" ))
   target:   (( param "Please identify the name of the target Concourse CI" ))
   url:      (( param "Please specify the full url of the target Concourse CI" ))
 
@@ -21,51 +21,88 @@ meta:
     email:  (( param "Please provide the git email for automated commits" ))
     name:   (( param "Please provide the git name for automated commits" ))
 
+  images:
+    go:
+      name: starkandwayne/concourse-go
+      tag: 1.12
+    cflinux:
+      name: cloudfoundry/cflinuxfs3
+      tag: latest
+
+  aws:
+    bucket:     (( grab meta.pipeline ))
+    region_name: us-east-1
+    access_key: (( param "Please set your AWS Access Key ID for your pipeline S3 Bucket" ))
+    secret_key: (( param "Please set your AWS Secret Key ID for your pipeline S3 Bucket" ))
+
   github:
     uri:          (( concat "git@github.com:" meta.github.owner "/" meta.github.repo ))
     owner:        (( param "Please specify the name of the user / organization that owns the Github repository" ))
-    repo:         (( param "Please specify the name of the Github repository" ))
+    repo:         (( grab meta.pipeline ))
     branch:       master
     private_key:  (( param "Please generate an SSH Deployment Key for this repo and specify it here" ))
     access_token: (( param "Please generate a Personal Access Token to be used for creating github releases (do you have a ci-bot?)" ))
 
-  image:
-    name: starkandwayne/concourse
-    tag: latest
+  slack:
+    webhook:       (( param "Please specify your Slack Incoming Webhook Integration URL" ))
+    success_moji:  ":airplane_departure:"
+    fail_moji:     ":airplane_arriving:"
+    upset_moji:    ":sad_panda:"
+    channel:       (( param "Please specify the channel (#name) or user (@user) to send messages to" ))
+    username:      concourse
+    icon:          https://cl.ly/2F421Y300u07/concourse-logo-blue-transparent.png
+    fail_url: '(( concat "<" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME| Concourse Failure! " meta.slack.upset_moji ">" ))'
 
 groups:
-  - name: (( grab meta.pipeline ))
-    jobs:
-    - pancake
+- name: (( grab meta.pipeline ))
+  jobs:
+    - (( grab meta.name ))
+    - shipit
 
 jobs:
-  - name: pancake
-    public: true
-    plan:
-    - do:
-      - get: git
-      - get: pancake
-        trigger: true
-        params: { globs: [cf-pancake-linux-amd64.tar.xz] }
-      - task: update-manifest
-        config:
-          platform: linux
-          image_resource:
-            type: docker-image
-            source:
-              repository: (( grab meta.image.name ))
-              tag:        (( grab meta.image.tag ))
-          inputs:
-          - name: git
-          - name: pancake
-          outputs:
-          - name: pushme
-          run:
-            path: git/ci/scripts/update-manifest.sh
-      - put: git
+- name: (( grab meta.name ))
+  public: true
+
+- name: shipit
+  public: true
+  plan:
+  - do:
+    - get: git
+      passed:
+      - (( grab meta.name ))
+    - get: (( grab meta.name ))
+      passed:
+      - (( grab meta.name ))
+      # trigger: true
+      params:
+        globs: ['x']
+    - task: release
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: (( grab meta.images.go.name ))
+            tag:        (( grab meta.images.go.tag ))
+        inputs:
+        - name: git
+        outputs:
+        - name: gh
+        - name: notifications
+        run:
+          path: ./git/ci/scripts/shipit.sh
+          args: []
         params:
-          repository: pushme
-          rebase: true
+          LIBRARY:     (( grab meta.name ))
+          RELEASE_OUT: gh
+          REPO_URL:    (( concat "https://github.com/" meta.github.owner "/" meta.github.repo ))
+          NOTIFICATION_OUT: notifications
+    - put: github
+      params:
+        name:   gh/name
+        tag:    gh/tag
+        body:   gh/notes.md
+        globs: [gh/artifacts/*]
 
 resources:
   - name: git
@@ -75,9 +112,9 @@ resources:
       branch:      (( grab meta.github.branch ))
       private_key: (( grab meta.github.private_key ))
 
-  - name: pancake
+  - name: github
     type: github-release
     source:
-      user: cloudfoundry-community
-      repository: cf-pancake
+      user:         (( grab meta.github.owner ))
+      repository:   (( grab meta.github.repo ))
       access_token: (( grab meta.github.access_token ))
