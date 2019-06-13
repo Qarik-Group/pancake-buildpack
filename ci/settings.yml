@@ -38,6 +38,7 @@ jobs:
       - get: git
       - get: pancake
         trigger: true
+        params: { globs: [cf-pancake-linux-amd64.*] }
       - task: update-manifest
         config:
           platform: linux
@@ -69,6 +70,6 @@ resources:
   - name: pancake
     type: github-release
     source:
-      user: cloudfoundry-community
+      user: starkandwayne
       repository: cf-pancake
       access_token: (( grab meta.github.access_token ))

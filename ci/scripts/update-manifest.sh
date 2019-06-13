@@ -27,7 +27,7 @@ pre_package: scripts/build.sh
 dependencies:
 - name: cf-pancake
   version: ${version}
-  uri: https://github.com/cloudfoundry-community/cf-pancake/releases/download/v${version}/cf-pancake-linux-amd64.tar.xz
+  uri: https://github.com/starkandwayne/cf-pancake/releases/download/v${version}/cf-pancake-linux-amd64.tar.xz
   sha256: ${sha}
   cf_stacks:
   - cflinuxfs2
